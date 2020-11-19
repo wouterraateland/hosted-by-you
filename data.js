@@ -1,17 +1,19 @@
-import { setMinutes, setSeconds, setMilliseconds } from "date-fns";
+import { addDays, setMinutes, setSeconds, setMilliseconds } from "date-fns";
 
 export const initialEvent = {
-  occursAt: setMilliseconds(setSeconds(setMinutes(new Date(), 0), 0), 0),
-  deadlineAt: null,
+  occursAt: setMilliseconds(
+    setSeconds(setMinutes(addDays(new Date(), 1), 0), 0),
+    0
+  ),
   endsAt: null,
-  title: "Origami club evening",
-  description: "Let's come together and create the most amazing origami's",
-  host: "Jo Nakashima",
-  image: "https://i.ytimg.com/vi/hFkGoFKMDI8/maxresdefault.jpg",
+  title: "",
+  description: "",
+  host: "",
+  image: null,
   locationOnline: true,
-  location: "https://zoom.us/j/348924",
-  capacity: 15,
-  participants: 8,
+  location: "",
+  capacity: null,
+  participants: 0,
   registrationRequired: false,
 };
 

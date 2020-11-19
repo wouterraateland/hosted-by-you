@@ -48,20 +48,20 @@ export default function EventPreview() {
         { dark: colorMode === "dark" }
       )}
     >
-      <div
-        className={cx(
-          "relative bg-gray-200 overflow-hidden rounded-xl shadow-sm",
-          actualLayout === "horizontal" ? "pr-48" : "w-full pb-2/3"
-        )}
-      >
-        {event.image && (
+      {event.image && (
+        <div
+          className={cx(
+            "relative overflow-hidden rounded-xl shadow-sm bg-gray-200",
+            actualLayout === "horizontal" ? "pr-48" : "w-full pb-2/3"
+          )}
+        >
           <img
             className="absolute w-full h-full object-cover"
             src={event.image}
             alt={event.title}
           />
-        )}
-      </div>
+        </div>
+      )}
       <Card
         elevation="md"
         className={cx(
@@ -74,10 +74,14 @@ export default function EventPreview() {
             <div className="flex justify-between items-start">
               <div>
                 <p className="text-gray-500 text-sm font-bold">
-                  <span>{event.host}</span>{" "}
+                  {event.host || <em className="text-gray-400">Event host</em>}{" "}
                   {isPast(event.occursAt) ? "invited" : "invites"} you
                 </p>
-                <h1 className="font-bold text-2xl">{event.title}</h1>
+                <h1 className="font-bold text-2xl">
+                  {event.title || (
+                    <em className="text-gray-400">Event title</em>
+                  )}
+                </h1>
               </div>
               <Button className="rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-white px-4 py-2 flex items-center space-x-2 focus:ring-2 focus:outline-none font-bold">
                 <Icons.Share className="w-4 h-4 stroke-current stroke-3" />
@@ -94,27 +98,37 @@ export default function EventPreview() {
                   {event.endsAt && `- ${format(event.endsAt, "hh:mm a")}`}
                 </span>
               </p>
-              <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-gray-500">
-                <Icons.Location className="w-4 h-4 stroke-current stroke-3" />
-                <span>
-                  {event.locationOnline ? (
-                    event.registrationRequired ? (
-                      "Online"
+              {event.location && (
+                <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-gray-500">
+                  <Icons.Location className="w-4 h-4 stroke-current stroke-3" />
+                  <span>
+                    {event.locationOnline ? (
+                      event.registrationRequired ? (
+                        "Online"
+                      ) : (
+                        <a
+                          className="text-blue-600"
+                          href={event.location}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                        >
+                          {cleanUrl(event.location, false)}
+                        </a>
+                      )
                     ) : (
                       <a
-                        className="text-blue-600"
-                        href={event.location}
+                        href={`https://maps.google.com?q=${event.location
+                          .split(" ")
+                          .join("+")}`}
                         target="_blank"
                         rel="noreferrer noopener"
                       >
-                        {cleanUrl(event.location, false)}
+                        {event.location}
                       </a>
-                    )
-                  ) : (
-                    event.location
-                  )}
-                </span>
-              </p>
+                    )}
+                  </span>
+                </p>
+              )}
               <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-gray-500">
                 <Icons.Group className="w-4 h-4 stroke-current stroke-3" />
                 <span>
@@ -127,20 +141,30 @@ export default function EventPreview() {
               </p>
             </div>
           </div>
-          <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-            {event.description}
-          </p>
+          {event.description && (
+            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+              {event.description}
+            </p>
+          )}
         </div>
 
         <div className="p-4 space-y-2 bg-blue-50 dark:bg-blue-900">
           <p className="text-blue-500 dark:text-blue-200">
-            {isPast(event.occursAt)
-              ? "This event has already occured. You can still register."
-              : event.registrationRequired
-              ? event.locationOnline
-                ? "Register to see the event details"
-                : "Register to join the event"
-              : `Register to let ${event.host} know that you are joining`}
+            {isPast(event.occursAt) ? (
+              "This event has already occured. You can still register."
+            ) : event.registrationRequired ? (
+              event.locationOnline ? (
+                "Register to see the event details"
+              ) : (
+                "Register to join the event"
+              )
+            ) : (
+              <span>
+                Register to let{" "}
+                {event.host || <em className="text-blue-300">Event host</em>}{" "}
+                know that you are joining
+              </span>
+            )}
           </p>
           <div className="flex flex-wrap items-center space-y-2 md:space-x-4 md:space-y-0 md:flex-nowrap">
             <input

@@ -14,6 +14,7 @@ export default function HostInput() {
         onChange={(event) =>
           setEvent((prev) => ({ ...prev, host: event.target.value }))
         }
+        required
       />
     </label>
   );

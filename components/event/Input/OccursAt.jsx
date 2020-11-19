@@ -12,6 +12,7 @@ export default function OccursAtInput() {
     <label className="block">
       <span className="text-sm font-bold text-gray-500">Starts at</span>
       <DatePicker
+        required
         className="block w-full border-b border-gray-300 focus:border-blue-600 focus:outline-none py-1"
         selected={event.occursAt}
         onChange={(occursAt) =>

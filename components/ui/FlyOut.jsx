@@ -1,4 +1,4 @@
-import * as _ from "utils";
+import { between } from "utils/math";
 import cx from "classnames";
 
 import { forwardRef, useCallback, useLayoutEffect, useRef } from "react";
@@ -89,7 +89,7 @@ export default forwardRef(function FlyOut(
           ? originRect.bottom + MARGIN
           : _direction === "top"
           ? Math.max(MARGIN, originRect.top - (height + MARGIN))
-          : _.between(
+          : between(
               MARGIN,
               wHeight - (height + MARGIN)
             )(originRect.centerY - height / 2);
@@ -98,7 +98,7 @@ export default forwardRef(function FlyOut(
           ? Math.max(MARGIN, originRect.left - (width + MARGIN))
           : _direction === "right"
           ? originRect.right + MARGIN
-          : _.between(
+          : between(
               MARGIN,
               wWidth - (width + MARGIN)
             )(originRect.centerX - width / 2);
@@ -173,7 +173,11 @@ export default forwardRef(function FlyOut(
       <div
         ref={containerRef}
         {...props}
-        className={cx("fixed rounded-md shadow-md bg-card scale-up", className)}
+        className={cx(
+          "fixed rounded-md shadow-md bg-white",
+          isVisible ? "opacity-100" : "opacity-0",
+          className
+        )}
       >
         <div
           className="py-2 overflow-y-auto"

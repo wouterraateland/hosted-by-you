@@ -1,17 +1,14 @@
-import "./ImageInput.scss";
-
-import * as _ from "utils";
+import { fileToImage, compressImage } from "utils/images";
 import cx from "classnames";
 
-import React, { useCallback, useRef, useState } from "react";
-import useTranslation from "hooks/useTranslation";
+import React, { useCallback, useRef } from "react";
 
 import * as Icons from "components/Icons";
-import FlyOut from "./FlyOut";
+import Button from "./Button";
 
 const HiddenImageInput = ({ onChange }) => (
   <input
-    className="input--hidden"
+    className="hidden absolute inset-0"
     type="file"
     accept="image/*"
     onChange={(event) => {
@@ -28,70 +25,59 @@ export default function ImageInput({
   onDelete,
   disabled,
   compression,
-  showIcon = true,
-  children,
   className,
   ...props
 }) {
   const containerRef = useRef(null);
-  const { t } = useTranslation();
-  const [isOpen, setOpen] = useState(false);
 
   const _onChange = useCallback(
     async (file) => {
-      setOpen(false);
-      const image = await _.fileToImage(file);
-      const compressedImage = await _.compressImage(image, compression);
+      const image = await fileToImage(file);
+      const compressedImage = await compressImage(image, compression);
       onChange(compressedImage);
     },
     [compression, onChange]
   );
 
-  const onRotate = useCallback(async () => {
-    const image = await _.urlToImage(value);
-    const rotatedImage = await _.rotateImage(image, compression);
-    onChange(rotatedImage);
-  }, [value, compression, onChange]);
-
   return (
-    <div
-      ref={containerRef}
-      className={cx("image-input", { "cursor-pointer": !disabled }, className)}
-      style={
-        value
-          ? { background: `url(${value}) no-repeat center / cover padding-box` }
-          : null
-      }
-      onClick={isOpen ? null : () => setOpen(true)}
-      {...props}
-    >
-      {disabled !== true &&
-        (value ? (
-          <FlyOut
-            originRef={containerRef}
-            isOpen={isOpen}
-            onClose={() => setOpen(false)}
-          >
-            <FlyOut.Item color="error" onClick={onDelete}>
-              <Icons.Bin size={1.25} /> {t`action.deleteImage`}
-            </FlyOut.Item>
-            <FlyOut.Item onClick={onRotate}>
-              <Icons.Random size={1.25} /> {t`action.rotateImage`}
-            </FlyOut.Item>
-            <FlyOut.Item as="label" style={{ position: "relative" }}>
-              <Icons.Camera size={1.25} /> {t`action.changeImage`}
-              <HiddenImageInput onChange={_onChange} />
-            </FlyOut.Item>
-          </FlyOut>
+    <div className="flex items-center space-x-4">
+      <label
+        ref={containerRef}
+        className={cx(
+          "block relative overflow-hidden flex-shrink-0",
+          { "cursor-pointer": !disabled },
+          className
+        )}
+        {...props}
+      >
+        {value ? (
+          <img className="w-full h-full object-cover" src={value} />
         ) : (
-          <>
-            <span className="image-input__label text-caption">
-              {showIcon && <Icons.Camera size={1.25} />}
-              {children}
-            </span>
-            <HiddenImageInput onChange={_onChange} />
-          </>
-        ))}
+          disabled !== true && (
+            <Icons.Camera className="relative w-4 h-4 stroke-current stroke-3" />
+          )
+        )}
+        <HiddenImageInput onChange={_onChange} disabled={disabled} />
+      </label>
+      {value ? (
+        <>
+          <Button
+            className="flex items-center space-x-2 px-2 py-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
+            onClick={onDelete}
+            disabled={disabled}
+          >
+            <Icons.Bin className="w-4 h-4 stroke-current stroke-3" />
+            <strong>Delete image</strong>
+          </Button>
+          <label className="relative flex items-center space-x-2 px-2 py-1 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer">
+            <Icons.Camera className="w-4 h-4 stroke-current stroke-3" />
+            <strong>Change image</strong>
+            <HiddenImageInput onChange={_onChange} disabled={disabled} />
+          </label>
+        </>
+      ) : (
+        <span>Upload image</span>
+      )}
     </div>
   );
 }

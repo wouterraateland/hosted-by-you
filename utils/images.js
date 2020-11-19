@@ -41,7 +41,7 @@ const rotateImage = (img, compression) => {
 
 const compressImage = (img, compression) => {
   const { maxArea, type, q } = {
-    maxArea: 320 * 320,
+    maxArea: 640 * 320,
     q: 0.75,
     type: "image/jpeg",
     ...compression,

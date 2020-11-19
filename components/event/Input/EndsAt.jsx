@@ -40,11 +40,10 @@ export default function EndsAtInput() {
       {event.endsAt && (
         <label className="block">
           <span className="text-sm font-bold text-gray-500">
-            Ends at (
+            Ends at - Event lasts{" "}
             {formatDuration(duration, {
               format: ["days", "hours", "minutes"],
             })}
-            )
           </span>
           <DatePicker
             className="block w-full border-b border-gray-300 focus:border-blue-600 focus:outline-none py-1"

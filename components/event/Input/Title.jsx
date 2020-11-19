@@ -14,6 +14,7 @@ export default function TitleInput() {
         onChange={(event) =>
           setEvent((prev) => ({ ...prev, title: event.target.value }))
         }
+        required
       />
     </label>
   );

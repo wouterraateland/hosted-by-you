@@ -1,10 +1,8 @@
 import * as _ from "utils";
 
-import BaseInput from "./BaseInput";
-
 export default function NumberInput({ onChange, decimals = 2, ...props }) {
   return (
-    <BaseInput
+    <input
       inputMode="numeric"
       pattern="[0-9]*"
       onChange={(event) => {
