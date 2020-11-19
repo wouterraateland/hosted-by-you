@@ -5,3 +5,7 @@
 .stroke-round {
   stroke-linejoin: round;
 }
+
+.react-datepicker-wrapper {
+  display: block;
+}

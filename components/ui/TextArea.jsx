@@ -1,20 +1,13 @@
 import cx from "classnames";
 
-import React, { forwardRef, useLayoutEffect, useRef } from "react";
-
-import BaseInput from "./BaseInput";
-
-const TextAreaImpl = forwardRef(({ className, ...props }, ref) => (
-  <textarea
-    ref={ref}
-    className={cx("input resize-none", className)}
-    {...props}
-  />
-));
+import { forwardRef, useLayoutEffect, useRef } from "react";
 
 const refreshEl = (el) => el.offsetHeight;
 
-export default forwardRef(function TextArea(props, ref) {
+export default forwardRef(function TextArea(
+  { className, rows, ...props },
+  ref
+) {
   const textAreaRef = useRef(null);
   useLayoutEffect(() => {
     const textArea = textAreaRef.current;
@@ -25,22 +18,21 @@ export default forwardRef(function TextArea(props, ref) {
       );
 
       refreshEl(textArea);
-      textArea.style.height = `${Math.max(
-        (props.rows || 1) * fontSize,
-        textArea.scrollHeight
-      )}px`;
+      textArea.style.height = `${
+        Math.max((rows || 1) * fontSize, textArea.scrollHeight) + 1
+      }px`;
     }
-  }, [ref, props.rows, props.value]);
+  }, [ref, rows, props.value]);
 
   return (
-    <BaseInput
+    <textarea
       ref={(c) => {
         textAreaRef.current = c;
         if (ref) {
           ref.current = c;
         }
       }}
-      component={TextAreaImpl}
+      className={cx("resize-none", className)}
       {...props}
     />
   );

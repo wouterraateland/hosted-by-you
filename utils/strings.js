@@ -9,6 +9,9 @@ const toContext = (contexts) =>
   contexts.flatMap(([key, value]) => (value ? [key] : [])).join("_") ||
   undefined;
 
+const urlRegex = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+const isURL = (s) => urlRegex.test(String(s).toLowerCase());
+
 const cleanUrl = (s, removePath) =>
   either(
     () => {
@@ -70,12 +73,23 @@ const copyTextModern = async (text) => {
 const copyTextToClipboard = async (text) =>
   navigator.clipboard ? await copyTextModern(text) : copyTextFallback(text);
 
+const formatLargeNumber = (n) =>
+  n >= 1_000_000_000
+    ? `${Math.round(n / 1_000_000_000)}B`
+    : n >= 1_000_000
+    ? `${Math.round(n / 1_000_000)}M`
+    : n >= 1_000
+    ? `${Math.round(n / 1_000)}K`
+    : n;
+
 export {
   capitalize,
   lowerCase,
   toContext,
+  isURL,
   cleanUrl,
   isEmail,
   concatSentence,
   copyTextToClipboard,
+  formatLargeNumber,
 };

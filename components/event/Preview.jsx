@@ -1,8 +1,9 @@
-import { cleanUrl } from "utils/strings";
+import { isJust } from "utils/functions";
+import { cleanUrl, formatLargeNumber } from "utils/strings";
 import cx from "classnames";
-import { format, isToday } from "date-fns";
+import { format, isToday, isPast } from "date-fns";
 
-import { useContext } from "react";
+import { useContext, useLayoutEffect, useRef, useState } from "react";
 import { EventContext, StylingContext } from "contexts";
 
 import * as Icons from "components/icons";
@@ -12,18 +13,45 @@ import Card from "components/ui/Card";
 export default function EventPreview() {
   const [event] = useContext(EventContext);
   const [{ layout, colorMode }] = useContext(StylingContext);
+  const [actualLayout, setActualLayout] = useState(
+    layout === "automatic" ? null : layout
+  );
+  const containerRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (container) {
+      const resetLayout = () =>
+        setActualLayout(
+          layout === "automatic"
+            ? container.offsetWidth > 640
+              ? "horizontal"
+              : "vertical"
+            : layout
+        );
+
+      resetLayout();
+      const resizeObserver = new ResizeObserver(resetLayout);
+      resizeObserver.observe(container);
+      return () => resizeObserver.unobserve(container);
+    }
+  }, [layout]);
 
   return (
     <div
+      ref={containerRef}
       className={cx(
-        layout === "horizontal" ? "flex -space-x-12" : "-space-y-12",
+        { "opacity-0": !actualLayout },
+        actualLayout === "horizontal"
+          ? "flex -space-x-12"
+          : "items-center -space-y-12 -mx-4 md:m-0",
         { dark: colorMode === "dark" }
       )}
     >
       <div
         className={cx(
           "relative bg-gray-200 overflow-hidden rounded-xl shadow-sm",
-          layout === "horizontal" ? "pr-48" : "pb-2/3"
+          actualLayout === "horizontal" ? "pr-48" : "w-full pb-2/3"
         )}
       >
         {event.image && (
@@ -38,15 +66,16 @@ export default function EventPreview() {
         elevation="md"
         className={cx(
           "relative min-w-0 flex-grow overflow-hidden",
-          layout === "horizontal" ? "my-4" : "mx-4"
+          actualLayout === "horizontal" ? "my-4" : "mx-4"
         )}
       >
         <div className="p-4 space-y-4">
           <div>
             <div className="flex justify-between items-start">
               <div>
-                <p className="text-gray-400 uppercase text-sm font-bold">
-                  <span>{event.host}</span> invites you
+                <p className="text-gray-500 text-sm font-bold">
+                  <span>{event.host}</span>{" "}
+                  {isPast(event.occursAt) ? "invited" : "invites"} you
                 </p>
                 <h1 className="font-bold text-2xl">{event.title}</h1>
               </div>
@@ -89,32 +118,38 @@ export default function EventPreview() {
               <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-gray-500">
                 <Icons.Group className="w-4 h-4 stroke-current stroke-3" />
                 <span>
-                  {event.participants} join{" "}
-                  {event.capacity &&
-                    ` • ${event.capacity - event.participants} spots left`}
+                  {formatLargeNumber(event.participants)} join{" "}
+                  {isJust(event.capacity) &&
+                    ` • ${formatLargeNumber(
+                      Math.max(0, event.capacity - event.participants)
+                    )} spots left`}
                 </span>
               </p>
             </div>
           </div>
-          <p className="text-gray-500">{event.description}</p>
+          <p className="text-gray-700 dark:text-gray-300 whitespace-pre-line">
+            {event.description}
+          </p>
         </div>
 
         <div className="p-4 space-y-2 bg-blue-50 dark:bg-blue-900">
           <p className="text-blue-500 dark:text-blue-200">
-            {event.registrationRequired
+            {isPast(event.occursAt)
+              ? "This event has already occured. You can still register."
+              : event.registrationRequired
               ? event.locationOnline
                 ? "Register to see the event details"
                 : "Register to join the event"
               : `Register to let ${event.host} know that you are joining`}
           </p>
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center space-y-2 md:space-x-4 md:space-y-0 md:flex-nowrap">
             <input
               className="min-w-0 bg-white border border-gray-300 rounded-md flex-grow px-4 py-2"
               name="email"
               type="email"
               placeholder="your@email.com"
             />
-            <Button className="rounded-md bg-blue-600 hover:bg-blue-700 border border-blue-900 text-white dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:border-yellow-300 dark:text-gray-900 px-4 py-2 flex items-center space-x-2 focus:ring-2 focus:outline-none font-bold">
+            <Button className="w-full md:w-auto rounded-md bg-blue-600 hover:bg-blue-700 border border-blue-900 text-white dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:border-yellow-300 dark:text-gray-900 px-4 py-2 flex items-center justify-center space-x-2 focus:ring-2 focus:outline-none font-bold">
               <Icons.Check className="w-4 h-4 stroke-current stroke-3" />
               <span>Register</span>
             </Button>

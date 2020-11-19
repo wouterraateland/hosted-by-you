@@ -1,5 +1,7 @@
+import { setMinutes, setSeconds, setMilliseconds } from "date-fns";
+
 export const initialEvent = {
-  occursAt: new Date(),
+  occursAt: setMilliseconds(setSeconds(setMinutes(new Date(), 0), 0), 0),
   deadlineAt: null,
   endsAt: null,
   title: "Origami club evening",
@@ -15,5 +17,5 @@ export const initialEvent = {
 
 export const initialStyling = {
   colorMode: "light",
-  layout: "vertical",
+  layout: "automatic",
 };

@@ -22,25 +22,31 @@ export default function Home() {
         </h1>
         <Benefits />
         <NewEventProvider>
-          <div className="md:flex space-x-4">
+          <div className="md:flex md:space-x-4 space-y-4 md:space-y-0">
             <div className="md:w-1/2 space-y-4">
-              <h2 className="flex items-center space-x-2 text-xl font-bold">
-                <span>✍️</span>
-                <span>Edit your event</span>
-              </h2>
-              <EventInput />
-              <h2 className="flex items-center space-x-2 text-xl font-bold">
-                <span>✨</span>
-                <span>Styling</span>
-              </h2>
-              <EventStyling />
+              <div className="space-y-2">
+                <h2 className="flex items-center space-x-2 text-xl font-bold">
+                  <span>✍️</span>
+                  <span>Setup</span>
+                </h2>
+                <EventInput />
+              </div>
+              <div className="space-y-2">
+                <h2 className="flex items-center space-x-2 text-xl font-bold">
+                  <span>✨</span>
+                  <span>Style</span>
+                </h2>
+                <EventStyling />
+              </div>
             </div>
             <div className="md:w-1/2 space-y-4">
-              <h2 className="flex items-center space-x-2 text-xl font-bold">
-                <span>👁</span>
-                <span>Preview</span>
-              </h2>
-              <EventPreview />
+              <div className="space-y-2 sticky top-4">
+                <h2 className="flex items-center space-x-2 text-xl font-bold">
+                  <span>👁</span>
+                  <span>Preview</span>
+                </h2>
+                <EventPreview />
+              </div>
             </div>
           </div>
         </NewEventProvider>
