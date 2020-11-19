@@ -14,12 +14,12 @@ const getTransform = (direction) => {
   }
 };
 
-export default ({ direction, style, ...props }) => (
-  <Icon
-    viewBox="0 0 32 32"
-    style={{ ...style, transform: getTransform(direction) }}
-    {...props}
-  >
-    <path d="M28 10L16 22 4 10" fill="none" />
-  </Icon>
-);
+const Caret = ({ direction, style, ...props }) => <Icon
+  viewBox="0 0 32 32"
+  style={{ ...style, transform: getTransform(direction) }}
+  {...props}
+>
+  <path d="M28 10L16 22 4 10" fill="none" />
+</Icon>;
+
+export default Caret;

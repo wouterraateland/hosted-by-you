@@ -14,12 +14,12 @@ const getTransform = direction => {
   }
 };
 
-export default ({ direction, ...props }) => (
-  <Icon
-    viewBox="0 0 32 32"
-    style={{ transform: getTransform(direction) }}
-    {...props}
-  >
-    <path d="M4 16h24M16 4l12 12-12 12" fill="none" />
-  </Icon>
-);
+const Arrow = ({ direction, ...props }) => <Icon
+  viewBox="0 0 32 32"
+  style={{ transform: getTransform(direction) }}
+  {...props}
+>
+  <path d="M4 16h24M16 4l12 12-12 12" fill="none" />
+</Icon>;
+
+export default Arrow;
