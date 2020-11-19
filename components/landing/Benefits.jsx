@@ -3,7 +3,7 @@ import Card from "components/ui/Card";
 
 export default function Benefits() {
   return (
-    <Card className="max-w-xl p-4 mx-auto space-y-2">
+    <Card className="max-w-xl p-4 space-y-2">
       <h2 className="font-bold text-xl">
         Create an embedable event page for FREE
       </h2>
@@ -13,9 +13,17 @@ export default function Benefits() {
         emoji="🌍"
         label="Embed it on your website, in blog posts, or anywhere you like"
       />
+      <Benefit emoji="✍️" label="Start right now by editing the event below" />
       <Benefit
-        emoji="✍️"
-        label="You can start right now by editing the example event below."
+        emoji="💡"
+        label={
+          <>
+            Not sure where to start?{" "}
+            <button className="text-blue-600 focus:outline-none">
+              Inspire me
+            </button>
+          </>
+        }
       />
     </Card>
   );

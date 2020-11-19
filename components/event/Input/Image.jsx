@@ -3,7 +3,7 @@ import { EventContext } from "contexts";
 
 import ImageInput from "components/ui/ImageInput";
 
-export default function HostInput() {
+export default function EventImageInput() {
   const [event, setEvent] = useContext(EventContext);
 
   return (

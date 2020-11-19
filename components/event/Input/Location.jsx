@@ -9,9 +9,12 @@ export default function LocationInput() {
   return (
     <div>
       <label className="block">
-        <span className="text-sm font-bold text-gray-500">Location</span>
+        <span className="text-sm font-bold text-gray-500">
+          Location (optional)
+        </span>
         <input
           className="block w-full border-b border-gray-300 focus:border-blue-600 focus:outline-none py-1"
+          placeholder="Address or URL"
           value={event.location}
           onChange={(event) =>
             setEvent((prev) => ({

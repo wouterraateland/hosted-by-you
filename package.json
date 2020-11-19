@@ -8,14 +8,18 @@
     "start": "next start"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^1.0.5",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
     "next": "10.0.2",
     "react": "17.0.1",
     "react-datepicker": "^3.3.0",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "eslint": "^7.13.0",
+    "eslint-plugin-react": "^7.21.5",
     "postcss": "^8.1.7",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^2.0.1"

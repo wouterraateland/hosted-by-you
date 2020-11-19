@@ -1,9 +1,10 @@
 import { useContext } from "react";
-import { StylingContext } from "contexts";
+import { EventContext, StylingContext } from "contexts";
 
 import Card from "components/ui/Card";
 
 export default function EventStyling() {
+  const [event] = useContext(EventContext);
   const [styling, setStyling] = useContext(StylingContext);
   return (
     <Card className="flex flex-wrap items-center py-2">
@@ -54,6 +55,7 @@ export default function EventStyling() {
                   layout: "automatic",
                 }))
               }
+              disabled={!event.image}
             />
             <span>Auto</span>
           </label>
@@ -69,6 +71,7 @@ export default function EventStyling() {
                   layout: "vertical",
                 }))
               }
+              disabled={!event.image}
             />
             <span>Vertical</span>
           </label>
@@ -81,6 +84,7 @@ export default function EventStyling() {
                 event.target.checked &&
                 setStyling((styling) => ({ ...styling, layout: "horizontal" }))
               }
+              disabled={!event.image}
             />
             <span>Horizontal</span>
           </label>

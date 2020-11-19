@@ -3,7 +3,8 @@ import cx from "classnames";
 
 import React, { useCallback, useRef } from "react";
 
-import * as Icons from "components/Icons";
+import Bin from "components/icons/Bin";
+import Camera from "components/icons/Camera";
 import Button from "./Button";
 
 const HiddenImageInput = ({ onChange }) => (
@@ -54,7 +55,7 @@ export default function ImageInput({
           <img className="w-full h-full object-cover" src={value} />
         ) : (
           disabled !== true && (
-            <Icons.Camera className="relative w-4 h-4 stroke-current stroke-3" />
+            <Camera className="relative w-4 h-4 stroke-current stroke-3" />
           )
         )}
         <HiddenImageInput onChange={_onChange} disabled={disabled} />
@@ -62,15 +63,16 @@ export default function ImageInput({
       {value ? (
         <>
           <Button
+            type="button"
             className="flex items-center space-x-2 px-2 py-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
             onClick={onDelete}
             disabled={disabled}
           >
-            <Icons.Bin className="w-4 h-4 stroke-current stroke-3" />
+            <Bin className="w-4 h-4 stroke-current stroke-3" />
             <strong>Delete image</strong>
           </Button>
           <label className="relative flex items-center space-x-2 px-2 py-1 rounded-full bg-gray-100 hover:bg-gray-200 cursor-pointer">
-            <Icons.Camera className="w-4 h-4 stroke-current stroke-3" />
+            <Camera className="w-4 h-4 stroke-current stroke-3" />
             <strong>Change image</strong>
             <HiddenImageInput onChange={_onChange} disabled={disabled} />
           </label>

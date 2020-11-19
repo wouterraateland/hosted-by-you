@@ -1,6 +1,6 @@
 import cx from "classnames";
 
-import { forwardRef, useLayoutEffect, useRef } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 
 const refreshEl = (el) => el.offsetHeight;
 
@@ -9,7 +9,7 @@ export default forwardRef(function TextArea(
   ref
 ) {
   const textAreaRef = useRef(null);
-  useLayoutEffect(() => {
+  useEffect(() => {
     const textArea = textAreaRef.current;
     if (textArea) {
       textArea.style.height = "0px";

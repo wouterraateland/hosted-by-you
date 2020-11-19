@@ -13,7 +13,6 @@ export const initialEvent = {
   locationOnline: true,
   location: "",
   capacity: null,
-  participants: 0,
   registrationRequired: false,
 };
 
