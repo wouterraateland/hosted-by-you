@@ -6,21 +6,24 @@ import { format, isToday, isPast } from "date-fns";
 import { useContext, useEffect, useRef, useState } from "react";
 import { EventContext, StylingContext } from "contexts";
 
-import Share from "components/icons/Share";
+// import Share from "components/icons/Share";
 import Calendar from "components/icons/Calendar";
 import Location from "components/icons/Location";
 import Group from "components/icons/Group";
-import Check from "components/icons/Check";
-import Button from "components/ui/Button";
+// import Button from "components/ui/Button";
 import Card from "components/ui/Card";
 
-export default function EventPreview() {
+import RegistrationForm from "./RegistrationForm";
+
+export default function EventPreview({ readOnly }) {
   const [event] = useContext(EventContext);
   const [{ layout, colorMode }] = useContext(StylingContext);
   const [actualLayout, setActualLayout] = useState(
     layout === "automatic" ? null : layout
   );
   const containerRef = useRef(null);
+
+  const spotsLeft = Math.max(0, event.capacity - (event.guestCount || 0));
 
   useEffect(() => {
     const container = containerRef.current;
@@ -45,22 +48,24 @@ export default function EventPreview() {
     <div
       ref={containerRef}
       className={cx(
+        "mx-auto w-full",
         { "opacity-0": !actualLayout },
+        { dark: colorMode === "dark" },
+        { "pointer-events-none": readOnly },
         actualLayout === "horizontal"
           ? "flex -space-x-12"
-          : "items-center -space-y-12 -mx-4 md:m-0",
-        { dark: colorMode === "dark" }
+          : "items-center -space-y-12"
       )}
     >
       {event.image && (
         <div
           className={cx(
-            "relative overflow-hidden rounded-xl shadow-sm bg-gray-200",
-            actualLayout === "horizontal" ? "pr-48" : "w-full pb-2/3"
+            "relative",
+            actualLayout === "horizontal" ? "pr-64" : "w-full pb-2/3"
           )}
         >
           <img
-            className="absolute w-full h-full object-cover"
+            className="absolute w-full h-full object-cover rounded-xl shadow-sm bg-gray-200"
             src={event.image}
             alt={event.title}
           />
@@ -70,7 +75,11 @@ export default function EventPreview() {
         elevation="md"
         className={cx(
           "relative min-w-0 flex-grow overflow-hidden",
-          event.image ? (actualLayout === "horizontal" ? "my-4" : "mx-4") : ""
+          event.image
+            ? actualLayout === "horizontal"
+              ? "my-4"
+              : "sm:mx-4"
+            : ""
         )}
       >
         <div className="p-4 space-y-4">
@@ -87,13 +96,13 @@ export default function EventPreview() {
                   )}
                 </h1>
               </div>
-              <Button
+              {/* <Button
                 type="button"
-                className="rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-white px-4 py-2 flex items-center space-x-2 focus:ring-2 focus:outline-none font-bold"
+                className="rounded-full bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-900 dark:hover:bg-blue-800 dark:text-white px-2 py-1 flex items-center space-x-2 focus:ring-2 focus:outline-none font-bold"
               >
                 <Share className="w-4 h-4 stroke-current stroke-3" />
                 <span>Share</span>
-              </Button>
+              </Button> */}
             </div>
             <div className="flex flex-wrap -mx-2">
               <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-red-400">
@@ -139,11 +148,12 @@ export default function EventPreview() {
               <p className="mx-2 my-1 flex items-center space-x-2 text-sm text-gray-500">
                 <Group className="w-4 h-4 stroke-current stroke-3" />
                 <span>
-                  {formatLargeNumber(event.guests || 0)} join{" "}
+                  {formatLargeNumber(event.guestCount || 0)}{" "}
+                  {event.guestCount === 1 ? "joins" : "join"}{" "}
                   {isJust(event.capacity) &&
-                    ` • ${formatLargeNumber(
-                      Math.max(0, event.capacity - (event.guests || 0))
-                    )} spots left`}
+                    ` • ${formatLargeNumber(spotsLeft)} ${
+                      spotsLeft === 1 ? "spot" : "spots"
+                    } left`}
                 </span>
               </p>
             </div>
@@ -156,39 +166,36 @@ export default function EventPreview() {
         </div>
 
         <div className="p-4 space-y-2 bg-blue-50 dark:bg-blue-900">
-          <p className="text-blue-500 dark:text-blue-200">
-            {isPast(event.occursAt) ? (
-              "This event has already occured. You can still register."
-            ) : event.registrationRequired ? (
-              event.locationOnline ? (
-                "Register to see the event details"
+          {event.myParticipation ? (
+            <div>
+              <p className="text-xl font-bold text-blue-900 dark:text-white">
+                Hurray!
+              </p>
+              <p className="text-sm text-blue-500 dark:text-blue-200">
+                You&apos;ve succesfully registered for this event. Check your
+                inbox for a personal link to manage your registration.
+              </p>
+            </div>
+          ) : (
+            <p className="text-blue-500 dark:text-blue-200">
+              {isPast(event.occursAt) ? (
+                "This event has already occured. You can still register."
+              ) : event.registrationRequired ? (
+                event.locationOnline ? (
+                  "Register to see the event details"
+                ) : (
+                  "Register to join the event"
+                )
               ) : (
-                "Register to join the event"
-              )
-            ) : (
-              <span>
-                Register to let{" "}
-                {event.host || <em className="text-blue-300">Event host</em>}{" "}
-                know that you are joining
-              </span>
-            )}
-          </p>
-          <form
-            className="flex flex-wrap items-center space-y-2 md:space-x-4 md:space-y-0 md:flex-nowrap"
-            onSubmit={(event) => event.preventDefault()}
-          >
-            <input
-              required
-              className="min-w-0 bg-white border border-gray-300 rounded-md flex-grow px-4 py-2"
-              name="email"
-              type="email"
-              placeholder="your@email.com"
-            />
-            <Button className="w-full md:w-auto rounded-md bg-blue-600 hover:bg-blue-700 border border-blue-900 text-white dark:bg-yellow-500 dark:hover:bg-yellow-600 dark:border-yellow-300 dark:text-gray-900 px-4 py-2 flex items-center justify-center space-x-2 focus:ring-2 focus:outline-none font-bold">
-              <Check className="w-4 h-4 stroke-current stroke-3" />
-              <span>Register</span>
-            </Button>
-          </form>
+                <span>
+                  Register to let{" "}
+                  {event.host || <em className="text-blue-300">Event host</em>}{" "}
+                  know that you are joining
+                </span>
+              )}
+            </p>
+          )}
+          <RegistrationForm />
         </div>
       </Card>
     </div>

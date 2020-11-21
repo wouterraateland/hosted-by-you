@@ -4,8 +4,8 @@ import { forwardRef, useEffect, useRef } from "react";
 
 const refreshEl = (el) => el.offsetHeight;
 
-export default forwardRef(function TextArea(
-  { className, rows, ...props },
+export default forwardRef(function Textarea(
+  { className, rows, extraHeight, ...props },
   ref
 ) {
   const textAreaRef = useRef(null);
@@ -19,7 +19,7 @@ export default forwardRef(function TextArea(
 
       refreshEl(textArea);
       textArea.style.height = `${
-        Math.max((rows || 1) * fontSize, textArea.scrollHeight) + 1
+        Math.max((rows || 1) * fontSize, textArea.scrollHeight) + extraHeight
       }px`;
     }
   }, [ref, rows, props.value]);

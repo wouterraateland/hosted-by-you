@@ -18,6 +18,7 @@ export default function DescriptionInput() {
         onChange={(event) =>
           setEvent((prev) => ({ ...prev, description: event.target.value }))
         }
+        extraHeight={1}
       />
     </label>
   );

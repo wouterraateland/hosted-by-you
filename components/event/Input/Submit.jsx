@@ -1,11 +1,16 @@
 import cx from "classnames";
 
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { EventContext } from "contexts";
 import Button from "components/ui/Button";
 
 export default function SubmitEvent() {
+  const [hasChanged, touch] = useState(null);
   const [event] = useContext(EventContext);
+
+  useEffect(() => {
+    touch((state) => (state === null ? false : true));
+  }, [event]);
 
   const missingData = [
     !event.title ? "Event title is required" : null,
@@ -25,10 +30,16 @@ export default function SubmitEvent() {
       >
         Save your event
       </Button>
-      {missingData.length > 0 && (
+      {missingData.length > 0 ? (
         <p className="text-sm text-red-500 text-center">
           {missingData.join(" • ")}
         </p>
+      ) : (
+        hasChanged && (
+          <p className="text-sm text-yellow-500 text-center">
+            Event has changed, save again.
+          </p>
+        )
       )}
     </div>
   );

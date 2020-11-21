@@ -1,3 +1,5 @@
+import { normalizeEventDates } from "utils/events";
+
 import { useCallback, useContext, useState } from "react";
 import { EventContext } from "contexts";
 
@@ -29,19 +31,7 @@ export default function EventInput() {
     });
     if (response.ok) {
       const createdEvent = await response.json();
-      setEvent({
-        ...createdEvent,
-        occursAt: createdEvent.occursAt
-          ? new Date(createdEvent.occursAt)
-          : null,
-        endsAt: createdEvent.endsAt ? new Date(createdEvent.endsAt) : null,
-        createdAt: createdEvent.createdAt
-          ? new Date(createdEvent.createdAt)
-          : null,
-        updatedAt: createdEvent.updatedAt
-          ? new Date(createdEvent.updatedAt)
-          : null,
-      });
+      setEvent(normalizeEventDates(createdEvent));
     } else {
       setError(await response.text());
     }

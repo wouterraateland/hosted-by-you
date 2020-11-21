@@ -68,7 +68,7 @@ async function viewEvent(req, res) {
 
   const { adminCode, guests, ...event } = data[0];
 
-  return res.status(200).json({ ...event, guests: guests.length });
+  return res.status(200).json({ ...event, guestCount: guests.length });
 }
 
 export default async (req, res) => {
