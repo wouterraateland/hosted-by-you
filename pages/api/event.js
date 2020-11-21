@@ -18,11 +18,20 @@ async function createEvent(req, res) {
     return res.status(500).json(error);
   }
 
-  return res.status(200).json(data[0]);
+  return res.status(200).json({ ...data[0], guests: [], guestCount: 0 });
 }
 
 async function updateEvent(req, res) {
-  const { id, createdAt, updatedAt, adminCode, ...rawEvent } = req.body;
+  const {
+    id,
+    createdAt,
+    updatedAt,
+    adminCode,
+    guestCount,
+    guests,
+    myParticipation,
+    ...rawEvent
+  } = req.body;
   const selectResponse = await supabase.from("events").select("*").eq("id", id);
 
   if (selectResponse.error) {
@@ -49,7 +58,7 @@ async function updateEvent(req, res) {
     return res.status(500).json(error);
   }
 
-  return res.status(200).json(data[0]);
+  return res.status(200).json({ ...data[0], guests, guestCount });
 }
 
 async function viewEvent(req, res) {

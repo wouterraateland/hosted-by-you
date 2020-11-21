@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.4.0",
     "@supabase/supabase-js": "^1.0.5",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",

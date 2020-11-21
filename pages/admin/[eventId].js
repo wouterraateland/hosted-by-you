@@ -72,9 +72,9 @@ export async function getServerSideProps(context) {
     return { notFound: true };
   }
 
-  const { adminCode, guests, ...event } = data[0];
+  const { guests, ...event } = data[0];
 
-  if (adminCode !== query.adminCode) {
+  if (event.adminCode !== query.adminCode) {
     return { props: { error: "Invalid adminCode" } };
   }
 

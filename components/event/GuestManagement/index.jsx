@@ -17,9 +17,11 @@ export default function GuestManagement() {
         {event.guests.length > 0 ? (
           <table className="w-full">
             <thead className="sticky text-left">
-              <th className="px-4 py-2">Email</th>
-              <th className="px-4 py-2">Status</th>
-              <th className="px-4 py-2">AccessCode</th>
+              <tr>
+                <th className="px-4 py-2">Email</th>
+                <th className="px-4 py-2">Status</th>
+                <th className="px-4 py-2">AccessCode</th>
+              </tr>
             </thead>
             <tbody>
               {event.guests.map((guest, i) => (

@@ -28,12 +28,8 @@ export default function RegistrationForm() {
         body: JSON.stringify({ eventId, email }),
       });
       if (response.ok) {
-        const myParticipation = await response.json();
-        setEvent((event) => ({
-          ...event,
-          myParticipation,
-          guestCount: event.guestCount + 1,
-        }));
+        const event = await response.json();
+        setEvent(event);
         setError(null);
       } else {
         setError(await response.text());

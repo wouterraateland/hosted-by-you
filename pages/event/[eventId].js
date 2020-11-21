@@ -83,14 +83,21 @@ export async function getServerSideProps(context) {
   }
 
   const { adminCode, guests, ...event } = data[0];
+  const myParticipation =
+    guests.find((guest) => guest.accessCode === query.accessCode) || null;
 
   return {
     props: {
       event: {
         ...event,
+        location:
+          !event.registrationRequired ||
+          !event.locationOnline ||
+          myParticipation
+            ? event.location
+            : null,
         guestCount: guests.length,
-        myParticipation:
-          guests.find((guest) => guest.accessCode === query.accessCode) || null,
+        myParticipation,
       },
     },
   };
