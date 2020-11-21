@@ -64,7 +64,7 @@ export default function ImageInput({
         <>
           <Button
             type="button"
-            className="flex items-center space-x-2 px-2 py-1 rounded-full bg-red-100 hover:bg-red-200 text-red-600"
+            className="flex items-center space-x-2 px-2 py-1 rounded-full bg-red-100 hover:bg-red-200 text-red-500"
             onClick={onDelete}
             disabled={disabled}
           >

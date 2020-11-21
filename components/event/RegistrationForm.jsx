@@ -81,7 +81,7 @@ export default function RegistrationForm() {
           </span>
         </Button>
       </div>
-      {error && <p className="text-red-600 text-xs">{JSON.stringify(error)}</p>}
+      {error && <p className="text-red-500 text-xs">{JSON.stringify(error)}</p>}
     </form>
   );
 }

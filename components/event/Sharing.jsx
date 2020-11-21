@@ -24,23 +24,42 @@ export default function EventSharing() {
   const [event] = useContext(EventContext);
   const [styling] = useContext(StylingContext);
 
-  const [{ embedCode, shareUrl, adminUrl }, setState] = useState({
+  const [{ error, sent }, setState] = useState({ sent: false });
+  const [{ embedCode, shareUrl, adminUrl }, setUrls] = useState({
     embedCode: "",
     shareUrl: "",
     adminUrl: "",
   });
 
   useEffect(() => {
-    setState({
+    setUrls({
       embedCode: getEmbedCode(event, styling),
       shareUrl: getShareUrl(event, styling),
       adminUrl: getAdminUrl(event),
     });
   }, [event, styling]);
 
-  const sendEventDetails = useCallback(async () => {
-    // TODO: implement
-  }, [embedCode, shareUrl, adminUrl]);
+  const sendEventDetails = useCallback(
+    async (email) => {
+      const response = await fetch("/api/sendEventDetails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          eventId: event.id,
+          email,
+          adminUrl,
+        }),
+      });
+      if (response.ok) {
+        setState({ sent: true });
+      } else {
+        setState({ error: await response.text() });
+      }
+    },
+    [event.id, embedCode, shareUrl, adminUrl]
+  );
 
   return (
     <Card id="share">
@@ -75,6 +94,8 @@ export default function EventSharing() {
                 readOnly
               />
             </label>
+          </div>
+          <div className="p-4 space-y-4 bg-blue-50 rounded-b-xl">
             <label className="block">
               <span>Admin url (share only with your co-hosts)</span>
               <span className="block text-sm text-gray-500">
@@ -87,30 +108,42 @@ export default function EventSharing() {
                 readOnly
               />
             </label>
+            {sent ? (
+              <p className="text-blue-600">
+                Succes! The URLs are sent to your email.
+              </p>
+            ) : (
+              <form
+                onSubmit={async (event) => {
+                  event.preventDefault();
+                  await sendEventDetails(event.target.email.value);
+                }}
+              >
+                <p>
+                  <span role="img" aria-label="Tip">
+                    💡
+                  </span>{" "}
+                  We can send the admin URL to your email so you don&apos;t lose
+                  it:
+                </p>
+                <div className="flex items-center space-x-4">
+                  <input
+                    className="flex-grow w-full px-4 py-2 rounded-md border border-gray-300 bg-gray-50"
+                    name="email"
+                    placeholder="your@email.com"
+                  />
+                  <Button className="text-center px-4 py-2 rounded-md border bg-blue-600 hover:bg-blue-700 border-blue-900 text-white font-bold whitespace-nowrap">
+                    Send admin URLs
+                  </Button>
+                </div>
+                {error && (
+                  <p className="text-sm text-red-500">
+                    {JSON.stringify(error)}
+                  </p>
+                )}
+              </form>
+            )}
           </div>
-          <form
-            className="bg-blue-50 p-4 rounded-b-xl"
-            onSubmit={async (event) => {
-              event.preventDefault();
-              await sendEventDetails();
-            }}
-          >
-            <p>
-              <span role="img" aria-label="Tip">
-                💡
-              </span>{" "}
-              We can send these URLs to your email so you don&apos;t lose them:
-            </p>
-            <div className="flex items-center space-x-4">
-              <input
-                className="flex-grow w-full px-4 py-2 rounded-md border border-gray-300 bg-gray-50"
-                placeholder="your@email.com"
-              />
-              <Button className="text-center px-4 py-2 rounded-md border bg-blue-600 hover:bg-blue-700 border-blue-900 text-white font-bold whitespace-nowrap">
-                Send event URLs
-              </Button>
-            </div>
-          </form>
         </>
       ) : (
         <p className="text-center text-gray-500">
