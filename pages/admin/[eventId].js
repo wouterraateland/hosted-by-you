@@ -30,11 +30,19 @@ export default function EventAdmin({ error, event }) {
     <div className="bg-gray-100 min-h-screen">
       <EventSEO event={eventState[0]} />
       <header className="p-4 space-y-8 bg-gradient-to-br from-blue-200 to-transparent">
-        <Link href="/">
-          <a className="inline-block">
-            <Logo />
+        <div className="flex items-center justify-between">
+          <Link href="/">
+            <a className="inline-block">
+              <Logo />
+            </a>
+          </Link>
+          <a
+            className="text-blue-600 hover:text-blue-700 font-bold"
+            href="mailto:wouterraateland@gmail.com"
+          >
+            Questions &amp; Feedback
           </a>
-        </Link>
+        </div>
       </header>
       <main className="p-4 space-y-4">
         <EventContext.Provider value={eventState}>

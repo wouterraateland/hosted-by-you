@@ -1,20 +1,20 @@
 {
-    "name": "Hosted by You",
-    "short_name": "Hosted by You",
-    "icons": [
-        {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#bfdbfe",
-    "background_color": "#bfdbfe",
-    "start_url": "https://hostedbyyou.com",
-    "display": "standalone"
+  "name": "Hosted by You",
+  "short_name": "Hosted by You",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#2563eb",
+  "background_color": "#bfdbfe",
+  "start_url": "https://hostedbyyou.com",
+  "display": "standalone"
 }

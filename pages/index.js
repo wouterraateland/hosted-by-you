@@ -15,7 +15,15 @@ export default function Home() {
       </Head>
 
       <header className="p-4 space-y-8 bg-gradient-to-br from-blue-200 to-transparent">
-        <Logo />
+        <div className="flex items-center justify-between">
+          <Logo />
+          <a
+            className="text-blue-600 hover:text-blue-700 font-bold"
+            href="mailto:wouterraateland@gmail.com"
+          >
+            Questions &amp; Feedback
+          </a>
+        </div>
         <Benefits />
       </header>
       <main className="p-4">
