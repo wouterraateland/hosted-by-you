@@ -1,5 +1,5 @@
 import EventInput from "./Input";
-import EventPreview from "./Preview";
+import EventEmbed from "./Embed";
 import EventStyling from "./Styling";
 import EventSharing from "./Sharing";
 
@@ -21,7 +21,7 @@ export default function EventEditor() {
             <span>👁</span>
             <span>Preview</span>
           </h2>
-          <EventPreview readOnly />
+          <EventEmbed readOnly />
         </div>
         <div className="space-y-2">
           <h2 className="flex items-center space-x-2 text-xl font-bold">

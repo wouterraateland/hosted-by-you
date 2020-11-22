@@ -9,7 +9,7 @@ import Link from "next/link";
 
 import Card from "components/ui/Card";
 import EventSEO from "components/event/SEO";
-import EventPreview from "components/event/Preview";
+import EventView from "components/event/View";
 import Logo from "components/landing/Logo";
 import { useState } from "react";
 
@@ -42,7 +42,7 @@ export default function Event({ error, event }) {
       <main className="mx-auto max-w-2xl">
         <EventContext.Provider value={eventState}>
           <StylingContext.Provider value={stylingState}>
-            <EventPreview />
+            <EventView />
           </StylingContext.Provider>
         </EventContext.Provider>
       </main>

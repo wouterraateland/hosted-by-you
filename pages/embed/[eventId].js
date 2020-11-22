@@ -1,13 +1,13 @@
 import { normalizeEventDates, normalizeEventStyling } from "utils/events";
 import { createClient } from "@supabase/supabase-js";
 
+import { useEffect, useState } from "react";
 import { EventContext, StylingContext } from "contexts";
 import { useRouter } from "next/router";
 
 import Card from "components/ui/Card";
 import EventSEO from "components/event/SEO";
-import EventPreview from "components/event/Preview";
-import { useState } from "react";
+import EventEmbed from "components/event/Embed";
 
 export default function EmbeddedEvent({ error, event }) {
   const { query } = useRouter();
@@ -15,6 +15,19 @@ export default function EmbeddedEvent({ error, event }) {
   const stylingState = useState(normalizeEventStyling(query));
 
   const [{ colorMode }] = stylingState;
+
+  useEffect(() => {
+    window.addEventListener("resize", function () {
+      window.parent.postMessage(
+        JSON.stringify({
+          src: window.location.toString(),
+          context: "iframe.resize",
+          height: 300, // pixels
+        }),
+        "*"
+      );
+    });
+  }, []);
 
   return error ? (
     <Card className="flex-grow max-w-2xl p-8 space-y-4 bg-red-600 text-white">
@@ -28,7 +41,7 @@ export default function EmbeddedEvent({ error, event }) {
       <EventSEO event={eventState[0]} />
       <EventContext.Provider value={eventState}>
         <StylingContext.Provider value={stylingState}>
-          <EventPreview />
+          <EventEmbed />
         </StylingContext.Provider>
       </EventContext.Provider>
     </div>
