@@ -102,7 +102,7 @@ export default function EventSharing() {
                 Use to change your event at any time later
               </span>
               <input
-                className="w-full px-2 py-1 rounded-md border border-gray-300 bg-gray-50"
+                className="w-full px-2 py-1 rounded-md border border-gray-300 bg-white"
                 value={adminUrl}
                 onFocus={selectContents}
                 readOnly
@@ -128,7 +128,7 @@ export default function EventSharing() {
                 </p>
                 <div className="flex items-center space-x-4">
                   <input
-                    className="flex-grow w-full px-4 py-2 rounded-md border border-gray-300 bg-gray-50"
+                    className="flex-grow w-full px-4 py-2 rounded-md border border-gray-300 bg-white"
                     name="email"
                     placeholder="your@email.com"
                   />

@@ -35,6 +35,7 @@ export default function SubmitEvent() {
           {missingData.join(" • ")}
         </p>
       ) : (
+        event.id &&
         hasChanged && (
           <p className="text-sm text-yellow-500 text-center">
             Event has changed, save again.
