@@ -8,7 +8,7 @@ import Card from "components/ui/Card";
 import EventInfo from "./Info";
 import RegistrationForm from "./RegistrationForm";
 
-export default function EventEmbed({ readOnly }) {
+export default function EventEmbed({ readOnly, maxHeight }) {
   const [event] = useContext(EventContext);
   const [{ layout, colorMode }] = useContext(StylingContext);
   const [actualLayout, setActualLayout] = useState(
@@ -20,18 +20,42 @@ export default function EventEmbed({ readOnly }) {
   useEffect(() => {
     const container = containerRef.current;
     const content = contentRef.current;
-    if (container) {
-      const resetLayout = () =>
+    if (container && content) {
+      let t = null;
+      const resetLayout = () => {
+        const actualMaxHeight =
+          window === window.parent
+            ? window.innerHeight
+            : maxHeight >= 100
+            ? maxHeight
+            : Infinity;
         setActualLayout(
           layout === "automatic"
             ? container.offsetWidth > 640
               ? "horizontal"
-              : window.innerHeight <
+              : actualMaxHeight <
                 content.offsetHeight + (container.offsetWidth * 2) / 3
               ? "small"
               : "vertical"
+            : layout === "vertical"
+            ? actualMaxHeight <
+              content.offsetHeight + (container.offsetWidth * 2) / 3
+              ? "small"
+              : layout
             : layout
         );
+        clearTimeout(t);
+        t = setTimeout(() => {
+          window.parent.postMessage(
+            JSON.stringify({
+              src: window.location.toString(),
+              context: "iframe.resize",
+              height: Math.min(actualMaxHeight, container.offsetHeight),
+            }),
+            "*"
+          );
+        });
+      };
 
       resetLayout();
       const resizeObserver = new ResizeObserver(resetLayout);
@@ -42,7 +66,7 @@ export default function EventEmbed({ readOnly }) {
         return window.removeEventListener("resize", resetLayout);
       };
     }
-  }, [layout]);
+  }, [layout, maxHeight]);
 
   return (
     <div className={cx({ dark: colorMode === "dark" })}>

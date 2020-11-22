@@ -1,7 +1,7 @@
 import { normalizeEventDates, normalizeEventStyling } from "utils/events";
 import { createClient } from "@supabase/supabase-js";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EventContext, StylingContext } from "contexts";
 import { useRouter } from "next/router";
 
@@ -16,19 +16,6 @@ export default function EmbeddedEvent({ error, event }) {
 
   const [{ colorMode }] = stylingState;
 
-  useEffect(() => {
-    window.addEventListener("resize", function () {
-      window.parent.postMessage(
-        JSON.stringify({
-          src: window.location.toString(),
-          context: "iframe.resize",
-          height: 300, // pixels
-        }),
-        "*"
-      );
-    });
-  }, []);
-
   return error ? (
     <Card className="flex-grow max-w-2xl p-8 space-y-4 bg-red-600 text-white">
       <h1 className="text-2xl font-bold">Something went wrong</h1>
@@ -37,11 +24,11 @@ export default function EmbeddedEvent({ error, event }) {
       </pre>
     </Card>
   ) : (
-    <div className={colorMode === "dark" ? "dark bg-gray-800" : "bg-gray-100"}>
+    <div className={colorMode}>
       <EventSEO event={eventState[0]} />
       <EventContext.Provider value={eventState}>
         <StylingContext.Provider value={stylingState}>
-          <EventEmbed />
+          <EventEmbed maxHeight={parseInt(query.maxHeight, 10)} />
         </StylingContext.Provider>
       </EventContext.Provider>
     </div>

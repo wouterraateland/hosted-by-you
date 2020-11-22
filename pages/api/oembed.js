@@ -34,8 +34,9 @@ export default async (req, res) => {
 
   const event = data[0];
 
-  const width = query.maxwidth || 640;
-  const height = query.maxheight || Math.floor((width * 2) / 3);
+  const width = query.maxwidth || 800;
+  const height =
+    query.maxheight || (width > 640 ? Math.floor(width / 2) : width);
   const layout = "automatic";
   const colorMode = "light";
 
@@ -47,7 +48,11 @@ export default async (req, res) => {
     provider_name: "Hosted by You",
     provider_url: "https://hostedbyyou.com",
     cache_age: 60,
-    html: `<iframe src="https://www.hostedbyyou.com/embed/${event.id}?layout=${layout}&colorMode=${colorMode}" width="${width}" height="${height}" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="width: ${width}px; height: ${height}px; border: 0; border-radius: 4px; overflow: hidden;" allowfullscreen></iframe><p style="margin-top:4px"><a href="https://www.hostedbyyou.com/event/${event.id}" title="${event.title}" target="_blank">Visit event page</a></p>`,
+    html: `<iframe src="https://www.hostedbyyou.com/embed/${
+      event.id
+    }?layout=${layout}&colorMode=${colorMode}&maxHeight=${
+      query.maxheight || 0
+    }" frameborder="0" marginwidth="0" marginheight="0" style="width: 100%; border: 0; border-radius: 12px; overflow: auto;" allowfullscreen />`,
     width,
     height,
     // thumbnail_url: "",
