@@ -1,3 +1,4 @@
+import { normalizeEventDates } from "utils/events";
 import cx from "classnames";
 
 import { useCallback, useContext, useState } from "react";
@@ -29,7 +30,7 @@ export default function RegistrationForm() {
       });
       if (response.ok) {
         const event = await response.json();
-        setEvent(event);
+        setEvent(normalizeEventDates(event));
         setError(null);
       } else {
         setError(await response.text());

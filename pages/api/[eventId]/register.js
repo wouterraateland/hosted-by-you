@@ -14,20 +14,35 @@ async function sendAccessCode(event, to, accessCode) {
   const textLines = [
     "Hi there,",
     "",
-    `Your registration for ${event.title} is confirmed.`,
+    `Your registration for "${event.title}" is confirmed.`,
     `To manage your registration, go to https://hostedbyyou.com/event/${event.id}?accessCode=${accessCode}`,
     "",
-    `Event details:`,
+    `Event details for "${event.title}":`,
     `Host: ${event.host}`,
     `Date: ${format(new Date(event.occursAt), "MMMM dd, hh:mm a")}${
-      event.endsAt && ` - ${format(new Date(event.endsAt), "hh:mm a")}`
+      event.endsAt ? ` - ${format(new Date(event.endsAt), "hh:mm a")}` : ""
     }`,
     `Location: ${event.location}${event.locationOnline ? " (online)" : ""}`,
     "",
     "Enjoy the event!",
     "— Hosted by You",
     "",
-    "PS. Want to host an event yourself? Checkout https://hostedbyyou.com",
+    "PS. Want to host an event yourself? Check out https://hostedbyyou.com",
+  ];
+
+  const htmlLines = [
+    `<p>Hi there,</p>`,
+    `<p>Your registration for <strong>${event.title}</strong> is confirmed.<br />`,
+    `To manage your registration, go to <a href="https://hostedbyyou.com/event/${event.id}?accessCode=${accessCode}">https://hostedbyyou.com/event/${event.id}?accessCode=${accessCode}</a></p>`,
+    `<p>Event details for <strong>${event.title}</strong>:<br />`,
+    `Host: ${event.host}<br />`,
+    `Date: ${format(new Date(event.occursAt), "MMMM dd, hh:mm a")}${
+      event.endsAt ? ` - ${format(new Date(event.endsAt), "hh:mm a")}` : ""
+    }<br />`,
+    `Location: ${event.location}${event.locationOnline ? " (online)" : ""}</p>`,
+    `<p>Enjoy the event!<br />`,
+    `— Hosted by You</p>`,
+    `<p>PS. Want to host an event yourself? Check out <a href="https://hostedbyyou.com">hostedbyyou.com</a></p>`,
   ];
 
   await sgMail.send({
@@ -38,6 +53,7 @@ async function sendAccessCode(event, to, accessCode) {
     },
     subject: `Registration for ${event.title} confirmed`,
     text: textLines.join("\n"),
+    html: htmlLines.join(""),
   });
 }
 

@@ -13,12 +13,11 @@ async function sendAdminUrl(event, to, adminUrl) {
   const textLines = [
     `Hi ${event.host},`,
     "",
-    `Here is your admin url for ${event.title}:`,
+    `Here is your admin url for "${event.title}":`,
     adminUrl,
     "Anyone with this url can manage your event. Only share it with co-hosts!",
     "",
-    `Event details:`,
-    `Title: ${event.title}`,
+    `Event details for "${event.title}":`,
     `Host: ${event.host}`,
     `Date: ${format(new Date(event.occursAt), "MMMM dd, hh:mm a")}${
       event.endsAt && ` - ${format(new Date(event.endsAt), "hh:mm a")}`
@@ -31,6 +30,22 @@ async function sendAdminUrl(event, to, adminUrl) {
     "PS. Any questions or feedback? Reach out to me at wouterraateland@gmail.com",
   ];
 
+  const htmlLines = [
+    `<p>Hi ${event.host},</p>`,
+    `<p>Here is your admin url for <strong>${event.title}</strong>:</p>`,
+    `<a href="${adminUrl}">${adminUrl}</a>`,
+    `<p>Anyone with this url can manage your event. Only share it with co-hosts!</p>`,
+    `<p>Event details for <strong>${event.title}</strong>:<br />`,
+    `Host: ${event.host}<br />`,
+    `Date: ${format(new Date(event.occursAt), "MMMM dd, hh:mm a")}${
+      event.endsAt ? ` - ${format(new Date(event.endsAt), "hh:mm a")}` : ""
+    }<br />`,
+    `Location: ${event.location}${event.locationOnline ? " (online)" : ""}</p>`,
+    `<p>Thank your for hosting with us. Enjoy your event!<br />`,
+    `— Hosted by You</p>`,
+    `<p>PS. Any questions or feedback? Reach out to me at <a href="mailto:wouterraateland@gmail.com">wouterraateland@gmail.com</a></p>`,
+  ];
+
   await sgMail.send({
     to,
     from: {
@@ -39,6 +54,7 @@ async function sendAdminUrl(event, to, adminUrl) {
     },
     subject: `Admin URL for ${event.title}`,
     text: textLines.join("\n"),
+    html: htmlLines.join(""),
   });
 }
 
