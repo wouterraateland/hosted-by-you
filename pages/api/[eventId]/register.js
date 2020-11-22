@@ -43,7 +43,8 @@ async function sendAccessCode(event, to, accessCode) {
 
 export default async (req, res) => {
   if (req.method === "POST") {
-    const { email, eventId } = req.body;
+    const { eventId } = req.query;
+    const { email } = req.body;
 
     const eventsRes = await supabase
       .from("events")

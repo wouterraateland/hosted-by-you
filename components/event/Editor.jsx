@@ -6,7 +6,7 @@ import EventSharing from "./Sharing";
 export default function EventEditor() {
   return (
     <div className="md:flex md:space-x-8 space-y-8 md:space-y-0 items-start">
-      <div className="md:w-1/2 space-y-8 sticky top-4">
+      <div className="md:w-1/2 space-y-8 md:sticky md:top-4">
         <div className="space-y-2">
           <h2 className="flex items-center space-x-2 text-xl font-bold">
             <span>✍️</span>
@@ -15,7 +15,7 @@ export default function EventEditor() {
           <EventInput />
         </div>
       </div>
-      <div className="md:w-1/2 space-y-8 sticky top-4">
+      <div className="md:w-1/2 space-y-8 md:sticky md:top-4">
         <div className="space-y-2">
           <h2 className="flex items-center space-x-2 text-xl font-bold">
             <span>👁</span>

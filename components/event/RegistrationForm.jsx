@@ -20,12 +20,12 @@ export default function RegistrationForm() {
 
   const participate = useCallback(
     async (email) => {
-      const response = await fetch("/api/register", {
+      const response = await fetch(`/api/${eventId}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ eventId, email }),
+        body: JSON.stringify({ email }),
       });
       if (response.ok) {
         const event = await response.json();
