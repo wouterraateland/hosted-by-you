@@ -1,6 +1,6 @@
 import { normalizeEventDates } from "utils/events";
 
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { EventContext } from "contexts";
 
 import Card from "components/ui/Card";
@@ -17,8 +17,20 @@ import TitleInput from "./Title";
 import Submit from "./Submit";
 
 export default function EventInput() {
+  const initializedRef = useRef(false);
   const [event, setEvent] = useContext(EventContext);
-  const [error, setError] = useState(null);
+  const [{ error, saved, touched }, setState] = useState({
+    error: null,
+    saved: false,
+    touched: false,
+  });
+
+  useEffect(() => {
+    if (initializedRef.current) {
+      setState({ touched: true });
+    }
+    initializedRef.current = true;
+  }, [event]);
 
   const createEvent = useCallback(async () => {
     const response = await fetch("/api/event", {
@@ -32,8 +44,9 @@ export default function EventInput() {
     if (response.ok) {
       const createdEvent = await response.json();
       setEvent(normalizeEventDates(createdEvent));
+      setTimeout(() => setState({ saved: true }));
     } else {
-      setError(await response.text());
+      setState({ error: await response.text() });
     }
   }, [event, setEvent]);
 
@@ -60,7 +73,7 @@ export default function EventInput() {
         <DescriptionInput />
         <CapacityInput />
         <SecurityInput />
-        <Submit />
+        <Submit saved={saved} touched={touched} />
       </form>
     </Card>
   );

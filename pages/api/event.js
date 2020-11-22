@@ -51,7 +51,7 @@ async function updateEvent(req, res) {
 
   const { data, error } = await supabase
     .from("events")
-    .update([rawEvent])
+    .update([{ ...rawEvent, updatedAt: new Date() }])
     .eq("id", id);
 
   if (error) {

@@ -11,7 +11,7 @@ const getShareUrl = (event) =>
   `${window.location.origin}/event/${event.id}`;
 const getAdminUrl = (event) =>
   typeof window !== "undefined" &&
-  `${window.location.origin}/admin/${event.id}?code=${event.adminCode}`;
+  `${window.location.origin}/admin/${event.id}?adminCode=${event.adminCode}`;
 
 const getEmbedCode = (event, styling) =>
   typeof window !== "undefined" &&
