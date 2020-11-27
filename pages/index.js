@@ -11,7 +11,21 @@ export default function Home() {
     <div className="bg-gray-100 min-h-screen">
       <Head>
         <title>Hosted by You</title>
+        <meta
+          name="description"
+          content="Simple events, embeddable everywhere"
+        />
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content="Hosted by You" />
+        <meta
+          property="og:description"
+          content="Simple events, embeddable everywhere"
+        />
+        <meta property="og:url" content="https://hostedbyyou.com" />
+        <meta
+          property="og:image"
+          content="https://hostedbyyou.com/og-image.png"
+        />
       </Head>
 
       <header className="p-4 space-y-8 bg-gradient-to-br from-blue-200 to-transparent">
