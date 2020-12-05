@@ -75,7 +75,14 @@ export default async (req, res) => {
       return res.status(404).json(new Error("Event not found"));
     }
 
-    await sendAdminUrl(events[0], email, adminUrl);
+    const event = events[0];
+
+    await supabase
+      .from("events")
+      .update({ adminEmail: email })
+      .eq("id", event.id);
+
+    await sendAdminUrl(event, email, adminUrl);
 
     return res.status(200).json({ success: true });
   }
